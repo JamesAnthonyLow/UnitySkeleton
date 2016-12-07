@@ -9,4 +9,5 @@ make TestAll #Make and run all the tests
 make TestClean #Clean the test intermediates
 make Test*** #Run a specific test by name (corresponds to src file name)
 make clobber #delete "build" directory
+make *** #Run rule specified in src.mk makefile
 ```
