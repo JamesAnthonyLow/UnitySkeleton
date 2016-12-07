@@ -11,3 +11,10 @@ make Test*** #Run a specific test by name (corresponds to src file name)
 make clobber #delete "build" directory
 make *** #Run rule specified in src.mk makefile
 ```
+
+Since UnitySkeleton contains and requires the Unity submodule you must run the following commands before using to pull Unity:
+
+```bash
+git submodule init
+git submodule update
+```
