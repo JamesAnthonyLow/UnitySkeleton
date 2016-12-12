@@ -34,4 +34,4 @@ $(OBJS_PATH)%.o: $(SRC_PATH)%.c
 	$(COMPILE) -o $@ $^
 
 clean:
-	-rm $(CLEAN_TARGETS) $(OBJS_PATH)*.o || :
+	-rm $(CLEAN_TARGETS) $(OBJS_PATH)*.o $(ROOT_PATH)*.out || :
