@@ -28,7 +28,7 @@ $(1)_PATHS += $(BUILD_PATH)$(1)/results/
 endef
 
 define TEST_RULES
-$(1):
+$(1): $($(1)_PATHS)
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
 	@echo $($(1)_TESTS)
@@ -39,7 +39,16 @@ $(1):
 	@echo $($(1)_PATHS)
 endef
 
+define MKDIR_RULES
+$($(1)_BUILD_PATH):
+	mkdir $$@
+	
+$($(1)_PATHS): $($(1)_BUILD_PATH)
+	mkdir $$@
+endef
+
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
+$(foreach t,$(TESTS),$(eval $(call MKDIR_RULES,$(t))))
 
 .PHONY: % $(TESTS)
