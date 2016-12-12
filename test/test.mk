@@ -35,7 +35,7 @@ endef
 #$(patsubst $($(1)_TEST_PATH)%.c, $($(1)_RESULTS_PATH)%.txt, $($(1)_TESTS)) 
 
 define TEST_RULES
-$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)%.c, $($(1)_OBJS_PATH)%.o, $($(1)_TESTS))
+$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/Test%.c, $($(1)_OBJS_PATH)/%.o, $($(1)_TESTS))
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
 	@echo $($(1)_TESTS)
@@ -47,8 +47,13 @@ $(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)%.c, $($(1)_OBJS_PATH)%.o, $($(1
 	@echo $($(1)_CFLAGS)
 endef
 
+define TEST_OBJECT_RULES
+$($(1)_OBJS_PATH)/Test%.o: $($(1)_TEST_PATH)/Test%.c
+	$(COMPILE) -o $$@ $$< $($(1)_CFLAGS)
+endef
+
 define OBJECT_RULES
-$($(1)_OBJS_PATH)%.o: $($(1)_TEST_PATH)%.c
+$($(1)_OBJS_PATH)/%.o: $($(1)_SRC_PATH)/%.c
 	$(COMPILE) -o $$@ $$< $($(1)_CFLAGS)
 endef
 
@@ -66,6 +71,7 @@ $(OBJS_PATH)unity.o: $(UNITY_PATH)unity.c
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_CFLAGS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
+$(foreach t,$(TESTS),$(eval $(call TEST_OBJECT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call OBJECT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call MKDIR_RULES,$(t))))
 
