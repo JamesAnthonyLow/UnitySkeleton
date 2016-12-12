@@ -29,14 +29,16 @@ $(OUT_PATH)HelloWorld/Greeting.out: $(OBJS_PATH)HelloWorld/TestGreeting.o $(OBJS
 $(OBJS_PATH)HelloWorld/Test%.o: $(TEST_PATH)HelloWorld/Test%.c
 	$(COMPILE) -o $@ $< $(CFLAGS)
 
-$(OBJS_PATH)HelloWorld: $(OBJS_PATH)
-	@mkdir $(OBJS_PATH)HelloWorld || :
-
-$(RESULTS_PATH)HelloWorld: $(RESULTS_PATH)
-	@mkdir $(RESULTS_PATH)HelloWorld || :
-
-$(OUT_PATH)HelloWorld: $(OUT_PATH)
-	@mkdir $(OUT_PATH)HelloWorld || :
+%HelloWorld: %
+	@mkdir $*HelloWorld || :
+##$(OBJS_PATH)HelloWorld: $(OBJS_PATH)
+##	@mkdir $(OBJS_PATH)HelloWorld || :
+##
+##$(RESULTS_PATH)HelloWorld: $(RESULTS_PATH)
+##	@mkdir $(RESULTS_PATH)HelloWorld || :
+##
+##$(OUT_PATH)HelloWorld: $(OUT_PATH)
+##	@mkdir $(OUT_PATH)HelloWorld || :
 
 %: $(patsubst $(TEST_PATH)%.c, $(RESULTS_PATH)%.txt, $(TEST_PATH)Test%.c)
 	@echo "\n"
