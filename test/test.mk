@@ -12,8 +12,10 @@ LINK = gcc
 
 
 DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
+TESTS = $(patsubst $(TEST_PATH)%, %, $(DIRS))
 
 test:
 	@echo $(DIRS)
+	@echo $(TESTS)
 
 .PHONY: test
