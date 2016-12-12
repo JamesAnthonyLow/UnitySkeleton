@@ -33,7 +33,7 @@ $(1)_CFLAGS = $(CFLAGS) -I$($(1)_SRC_PATH)
 endef
 
 define TEST_RULES
-$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/Test%.c, $($(1)_OUT_PATH)/Test%.out, $($(1)_TESTS))
+$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/%.c, $($(1)_RESULTS_PATH)/%.txt, $($(1)_TESTS))
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
 	@echo $($(1)_TESTS)
@@ -43,6 +43,11 @@ $(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/Test%.c, $($(1)_OUT_PATH)/Test%
 	@echo $($(1)_RESULTS_PATH)
 	@echo $($(1)_PATHS)
 	@echo $($(1)_CFLAGS)
+endef
+
+define RESULTS_RULES
+$($(1)_RESULTS_PATH)/%.txt: $($(1)_OUT_PATH)/%.out
+	@-./$$< > $$@ 2>&1 || :
 endef
 
 define OUT_RULES
@@ -65,15 +70,26 @@ $($(1)_PATHS):
 	@-mkdir -p $$@ || :
 endef
 
+define PRECIOUS_TARGETS
+PRECIOUS: $($(1)_RESULTS_PATH)/%.txt
+endef
+
+define PHONY_TARGETS
+PHONY: $($(1)_RESULTS_PATH)/%.txt
+endef
+
 $(OBJS_PATH)unity.o: $(UNITY_PATH)unity.c 
 	$(COMPILE) -o $@ $< $(CFLAGS)
 
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_CFLAGS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
+$(foreach t,$(TESTS),$(eval $(call RESULTS_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call OUT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_OBJECT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call OBJECT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call MKDIR_RULES,$(t))))
+$(foreach t,$(TESTS),$(eval $(call PRECIOUS_TARGETS,$(t))))
+$(foreach t,$(TESTS),$(eval $(call PHONY_TARGETS,$(t))))
 
 .PHONY: % $(TESTS) 
