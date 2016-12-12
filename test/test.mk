@@ -3,43 +3,6 @@ TESTS = $(wildcard $(TEST_PATH)*.c)
 
 All: $(patsubst $(TEST_PATH)Test%.c, %, $(TESTS))
 
-HELLO_WORLD_PATHS = $(OBJS_PATH)HelloWorld $(RESULTS_PATH)HelloWorld $(OUT_PATH)HelloWorld 
-
-HelloWorldGreeting: $(HELLO_WORLD_PATHS) $(RESULTS_PATH)HelloWorld/Greeting.txt  
-	@echo "\n"
-	@echo "-------------------------------------------------------------------------------------"
-	@echo $@
-	@echo "-------------------------------------------------------------------------------------"
-	@echo $(BLUE)
-	@echo "`grep -s Tests $(RESULTS_PATH)HelloWorld/*.txt`"
-	@echo $(OFF)
-	@echo "-------------------------------------------------------------------------------------"
-	@echo $(RED)
-	@echo "`grep -s FAIL $(RESULTS_PATH)HelloWorld/*.txt`"
-	@echo $(OFF)
-	@echo "\nDONE"
-
-
-$(RESULTS_PATH)HelloWorld/Greeting.txt: $(OUT_PATH)HelloWorld/Greeting.out
-	@-./$< > $@ 2>&1 || :
-
-$(OUT_PATH)HelloWorld/Greeting.out: $(OBJS_PATH)HelloWorld/TestGreeting.o $(OBJS_PATH)HelloWorld/Greeting.o $(OBJS_PATH)unity.o
-	$(LINK) -o $@ $^ 
-
-$(OBJS_PATH)HelloWorld/Test%.o: $(TEST_PATH)HelloWorld/Test%.c
-	$(COMPILE) -o $@ $< $(CFLAGS)
-
-%HelloWorld: %
-	@mkdir $*HelloWorld || :
-##$(OBJS_PATH)HelloWorld: $(OBJS_PATH)
-##	@mkdir $(OBJS_PATH)HelloWorld || :
-##
-##$(RESULTS_PATH)HelloWorld: $(RESULTS_PATH)
-##	@mkdir $(RESULTS_PATH)HelloWorld || :
-##
-##$(OUT_PATH)HelloWorld: $(OUT_PATH)
-##	@mkdir $(OUT_PATH)HelloWorld || :
-
 %: $(patsubst $(TEST_PATH)%.c, $(RESULTS_PATH)%.txt, $(TEST_PATH)Test%.c)
 	@echo "\n"
 	@echo "-------------------------------------------------------------------------------------"
