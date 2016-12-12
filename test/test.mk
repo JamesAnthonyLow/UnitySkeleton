@@ -33,16 +33,19 @@ $(1)_CFLAGS = $(CFLAGS) -I$($(1)_SRC_PATH)
 endef
 
 define TEST_RULES
-$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/%.c, $($(1)_RESULTS_PATH)/%.txt, $($(1)_TESTS))
-	@echo $($(1)_TEST_PATH)
-	@echo $($(1)_SRC_PATH)
-	@echo $($(1)_TESTS)
-	@echo $($(1)_BUILD_PATH)
-	@echo $($(1)_OBJS_PATH)
-	@echo $($(1)_OUT_PATH)
-	@echo $($(1)_RESULTS_PATH)
-	@echo $($(1)_PATHS)
-	@echo $($(1)_CFLAGS)
+$(1): $(patsubst $($(1)_TEST_PATH)/%.c, $($(1)_RESULTS_PATH)/%.txt, $($(1)_TESTS))
+	@echo "\n"
+	@echo "-------------------------------------------------------------------------------------"
+	@echo $$@
+	@echo "-------------------------------------------------------------------------------------"
+	@echo $(BLUE)
+	@echo "`grep -s Tests $($(1)_RESULTS_PATH)/*.txt`"
+	@echo $(OFF)
+	@echo "-------------------------------------------------------------------------------------"
+	@echo $(RED)
+	@echo "`grep -s FAIL $($(1)_RESULTS_PATH)/*.txt`"
+	@echo $(OFF)
+	@echo "\nDONE"
 endef
 
 define RESULTS_RULES
