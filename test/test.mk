@@ -1,6 +1,7 @@
 TEST_DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
 SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS)) 
 TESTS = $(patsubst $(TEST_PATH)%/, %, $(TEST_DIRS))
+CFLAGS = -I$(UNITY_PATH)
 
 define TEST_PATHS
 $(1)_TEST_PATH = $(TEST_PATH)$(1)
@@ -82,4 +83,7 @@ $(foreach t,$(TESTS),$(eval $(call MKDIR_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call PRECIOUS_TARGETS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call PHONY_TARGETS,$(t))))
 
-.PHONY: % $(TESTS) 
+.PHONY: % $(TESTS) Clean
+
+Clean:
+	@-rm $(OUT_PATH)*/*.out $(OBJS_PATH)*/*.o $(RESULTS_PATH)*/*.txt || :
