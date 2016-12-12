@@ -20,11 +20,11 @@ $(1):
 	@echo $(1)
 endef
 
-$(eval $(call TEST_RULES,HelloWorld))
+$(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
 
-test:
+test_make:
 	@echo $(TEST_DIRS)
 	@echo $(SOURCE_DIRS)
 	@echo $(TESTS)
 
-.PHONY: test % $(TESTS)
+.PHONY: % $(TESTS)
