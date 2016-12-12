@@ -3,6 +3,8 @@ SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS))
 TESTS = $(patsubst $(TEST_PATH)%/, %, $(TEST_DIRS))
 CFLAGS = -I$(UNITY_PATH)
 
+All: $(TESTS)
+
 define TEST_PATHS
 $(1)_TEST_PATH = $(TEST_PATH)$(1)
 $(1)_SRC_PATH = $(SRC_PATH)$(1)
