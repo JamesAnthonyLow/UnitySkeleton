@@ -1,28 +1,19 @@
-##Declare your object files here
-##MYOBJ := $(patsubst %.o, $(OBJS_PATH)%.o, obj1.o obj2.o)
+export BLUE = "\033[1;34m"
+export RED = "\033[1;31m"
+export OFF = "\033[0m"
+export ROOT_PATH = ./
+export UNITY_PATH = ./test/Unity/src/
+export SRC_PATH = ./src/
+export TEST_PATH = ./test/
+export BUILD_PATH = ./build/
+export OBJS_PATH = ./build/objs/
+export OUT_PATH = ./build/out/
+export RESULTS_PATH = ./build/results/
+export PATHS = $(BUILD_PATH) $(OUT_PATH) $(OBJS_PATH) $(RESULTS_PATH)
+export COMPILE = gcc -c
+export LINK = gcc
 
-##Place your source rules here
-#Program: $(RT_OBJ)
-#	$(LINK) -o $(ROOT_PATH)Program.out $(MYOBJ)
-HelloWorld: 
-	$(LINK) -o $(ROOT_PATH)HelloWorld.out $(HELLOWORLD_OBJ)
+Main: $(OBJS_PATH)MyProgram.o $(SRC_PATH)HelloWorld/Greeting.o
 
-$(OBJS_PATH)%.o: $(SRC_PATH)%.c
-	$(COMPILE) -o $@ $<
-
-HelloWorldObjs:
-	@echo $(HelloWorld_OBJS)
-
-define SRC_DIR_OBJS
-$(1)_OBJS = $(patsubst %.c, %.o, $(wildcard $(SRC_PATH)$(1)/*.c))
-endef
-
-SRC_DIRS = $(dir $(wildcard $(SRC_PATH)*/*.c))
-SRCS = $(patsubst $(SRC_PATH)%/, %, $(SRC_DIRS))
-
-$(foreach d,$(SRCS),$(eval $(call SRC_DIR_OBJS,$(d))))
-
-.PHONY: clean
-
-clean:
-	-rm $(OBJS_PATH)*.o $(ROOT_PATH)*.out
+HelloWorld/%:
+	$(MAKE) -f $(SRC_PATH)HelloWorld/src.mk
