@@ -29,7 +29,7 @@ $(1)_PATHS += $(BUILD_PATH)$(1)/results
 endef
 
 define TEST_CFLAGS
-CFLAGS += -I$($(1)_SRC_PATH)
+$(1)_CFLAGS = $(CFLAGS) -I$($(1)_SRC_PATH)
 endef
 
 #$(patsubst $($(1)_TEST_PATH)%.c, $($(1)_RESULTS_PATH)%.txt, $($(1)_TESTS)) 
@@ -49,7 +49,7 @@ endef
 
 define OBJECT_RULES
 $($(1)_OBJS_PATH)%.o: $($(1)_TEST_PATH)%.c
-	$(COMPILE) -o $$@ $$< $(CFLAGS)
+	$(COMPILE) -o $$@ $$< $($(1)_CFLAGS)
 endef
 
 define MKDIR_RULES
