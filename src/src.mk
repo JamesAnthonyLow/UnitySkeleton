@@ -13,7 +13,22 @@ export PATHS = $(BUILD_PATH) $(OUT_PATH) $(OBJS_PATH) $(RESULTS_PATH)
 export COMPILE = gcc -c
 export LINK = gcc
 
-Main: $(OBJS_PATH)MyProgram.o $(SRC_PATH)HelloWorld/Greeting.o
+test_make:
+	@echo $(HelloWorldObjs)Greeting.o
+	@echo $(HelloWorldSrc)Greeting.c
 
-HelloWorld/%:
-	$(MAKE) -f $(SRC_PATH)HelloWorld/src.mk
+SRC_DIRS = $(dir $(wildcard $(SRC_PATH)*/*.c))
+SRCS = $(patsubst $(SRC_PATH)%/, %, $(SRC_DIRS))
+
+define SRC_PATHS
+$(1)Objs = $(BUILD_PATH)$(1)/src/objs/
+$(1)Src = $(SRC_PATH)$(1)/
+endef
+
+$(foreach s,$(SRCS),$(eval $(call SRC_PATHS,$(s))))
+
+Main: $(OBJS_PATH)MyProgram.o $(HelloWorldObjs)Greeting.o
+	$(LINK) -o $@.out $^
+
+$(HelloWorldObjs)%.o: $(HelloWorldSrc)%.c
+	$(COMPILE) -o $@ $^
