@@ -1,5 +1,5 @@
 #include "unity.h"
-#include "HelloWorld.h"
+#include "Greeting.h"
 
 void test_HelloWorld(void)
 {
