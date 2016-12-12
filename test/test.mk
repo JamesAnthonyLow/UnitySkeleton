@@ -11,11 +11,13 @@ COMPILE = gcc -c
 LINK = gcc
 
 
-DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
-TESTS = $(patsubst $(TEST_PATH)%, %, $(DIRS))
+TEST_DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
+SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS)) 
+TESTS = $(patsubst $(TEST_PATH)%, %, $(TEST_DIRS))
 
 test:
-	@echo $(DIRS)
+	@echo $(TEST_DIRS)
+	@echo $(SOURCE_DIRS)
 	@echo $(TESTS)
 
 .PHONY: test
