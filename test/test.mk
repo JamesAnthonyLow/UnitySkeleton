@@ -22,6 +22,9 @@ $(1)_BUILD_PATH = $(BUILD_PATH)$(1)
 $(1)_OBJS_PATH = $(BUILD_PATH)$(1)/objs/
 $(1)_OUT_PATH = $(BUILD_PATH)$(1)/out/
 $(1)_RESULTS_PATH = $(BUILD_PATH)$(1)/results/
+$(1)_PATHS += $(BUILD_PATH)$(1)/objs/
+$(1)_PATHS += $(BUILD_PATH)$(1)/out/
+$(1)_PATHS += $(BUILD_PATH)$(1)/results/
 endef
 
 define TEST_RULES
@@ -33,14 +36,10 @@ $(1):
 	@echo $($(1)_OBJS_PATH)
 	@echo $($(1)_OUT_PATH)
 	@echo $($(1)_RESULTS_PATH)
+	@echo $($(1)_PATHS)
 endef
 
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
-
-test_make:
-	@echo $(TEST_DIRS)
-	@echo $(SOURCE_DIRS)
-	@echo $(TESTS)
 
 .PHONY: % $(TESTS)
