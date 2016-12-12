@@ -14,16 +14,17 @@ TEST_DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
 SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS)) 
 TESTS = $(patsubst $(TEST_PATH)%/, %, $(TEST_DIRS))
 
-##$(1)_TESTS = $(wildcard $($(1)_TEST_PATH)*.c)
 define TEST_PATHS
 $(1)_TEST_PATH = $(TEST_PATH)$(1)
 $(1)_SRC_PATH = $(SRC_PATH)$(1)
+$(1)_TESTS = $(wildcard $(TEST_PATH)$(1)/*.c)
 endef
 
 define TEST_RULES
 $(1):
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
+	@echo $($(1)_TESTS)
 endef
 
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
