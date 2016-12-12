@@ -18,12 +18,20 @@ $($(1)Src):
 	mkdir -p $$@
 endef
 
+define CLEAN_PATHS
+CLEAN_TARGETS += $($(1)Objs)/*.o
+endef
+
 $(foreach s,$(SRCS),$(eval $(call SRC_PATHS,$(s))))
 $(foreach s,$(SRCS),$(eval $(call SRC_OBJS_RULES,$(s))))
 $(foreach s,$(SRCS),$(eval $(call MKDIR_RULES,$(s))))
+$(foreach s,$(SRCS),$(eval $(call CLEAN_PATHS,$(s))))
 
 Main: $(OBJS_PATH)MyProgram.o $(HelloWorldObjs)Greeting.o
 	$(LINK) -o $@.out $^
 
 $(OBJS_PATH)%.o: $(SRC_PATH)%.c
 	$(COMPILE) -o $@ $^
+
+clean:
+	-rm $(CLEAN_TARGETS) $(OBJS_PATH)*.o || :
