@@ -21,7 +21,7 @@ $(1)_CFLAGS = $(CFLAGS) -I$($(1)_SRC_PATH)
 endef
 
 define TEST_RULES
-$(1): $(patsubst $($(1)_TEST_PATH)/%.c, $($(1)_RESULTS_PATH)/%.txt, $($(1)_TESTS))
+$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)/%.c, $($(1)_RESULTS_PATH)/%.txt, $($(1)_TESTS))
 	@echo "\n"
 	@echo "-------------------------------------------------------------------------------------"
 	@echo $$@
