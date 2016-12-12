@@ -18,6 +18,10 @@ define TEST_PATHS
 $(1)_TEST_PATH = $(TEST_PATH)$(1)
 $(1)_SRC_PATH = $(SRC_PATH)$(1)
 $(1)_TESTS = $(wildcard $(TEST_PATH)$(1)/*.c)
+$(1)_BUILD_PATH = $(BUILD_PATH)$(1)
+$(1)_OBJS_PATH = $(BUILD_PATH)$(1)/objs/
+$(1)_OUT_PATH = $(BUILD_PATH)$(1)/out/
+$(1)_RESULTS_PATH = $(BUILD_PATH)$(1)/results/
 endef
 
 define TEST_RULES
@@ -25,6 +29,10 @@ $(1):
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
 	@echo $($(1)_TESTS)
+	@echo $($(1)_BUILD_PATH)
+	@echo $($(1)_OBJS_PATH)
+	@echo $($(1)_OUT_PATH)
+	@echo $($(1)_RESULTS_PATH)
 endef
 
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
