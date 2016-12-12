@@ -10,16 +10,23 @@ PATHS = $(BUILD_PATH) $(OUT_PATH) $(OBJS_PATH) $(RESULTS_PATH)
 COMPILE = gcc -c
 LINK = gcc
 
-
 TEST_DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
 SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS)) 
 TESTS = $(patsubst $(TEST_PATH)%/, %, $(TEST_DIRS))
 
-define TEST_RULES
-$(1):
-	@echo $(1)
+##$(1)_TESTS = $(wildcard $($(1)_TEST_PATH)*.c)
+define TEST_PATHS
+$(1)_TEST_PATH = $(TEST_PATH)$(1)
+$(1)_SRC_PATH = $(SRC_PATH)$(1)
 endef
 
+define TEST_RULES
+$(1):
+	@echo $($(1)_TEST_PATH)
+	@echo $($(1)_SRC_PATH)
+endef
+
+$(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
 
 test_make:
