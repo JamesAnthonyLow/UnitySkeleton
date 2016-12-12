@@ -1,4 +1,4 @@
-SRC_DIRS = $(dir $(wildcard $(SRC_PATH)*/*.c))
+SRC_DIRS = $(sort $(dir $(wildcard $(SRC_PATH)*/*.c)))
 SRCS = $(patsubst $(SRC_PATH)%/, %, $(SRC_DIRS))
 
 define SRC_PATHS
@@ -6,8 +6,12 @@ $(1)Objs = $(BUILD_PATH)$(1)/src/objs/
 $(1)Src = $(SRC_PATH)$(1)/
 endef
 
+define SUB_SRCS
+$(1)Srcs = $(wildcard $($(1)Src)*.c)
+endef
+
 define OBJS_VARS
-$(1): $(patsubst $($(1)Src)%.c, $($(1)Objs)%.o, $(wildcard $($(1)Src)*.c))
+$(1) = $(patsubst $($(1)Src)%.c, $($(1)Objs)%.o, $($(1)Srcs))
 endef
 
 define SRC_OBJS_RULES
@@ -17,9 +21,9 @@ endef
 
 define MKDIR_RULES
 $($(1)Objs):
-	mkdir -p $$@
+	@-mkdir -p $$@ || :
 $($(1)Src):
-	mkdir -p $$@
+	@-mkdir -p $$@ || :
 endef
 
 define CLEAN_PATHS
@@ -27,18 +31,13 @@ CLEAN_TARGETS += $($(1)Objs)/*.o
 endef
 
 $(foreach s,$(SRCS),$(eval $(call SRC_PATHS,$(s))))
+$(foreach s,$(SRCS),$(eval $(call SUB_SRCS,$(s))))
 $(foreach s,$(SRCS),$(eval $(call OBJS_VARS,$(s))))
 $(foreach s,$(SRCS),$(eval $(call SRC_OBJS_RULES,$(s))))
-$(foreach s,$(SRCS),$(eval $(call MKDIR_RULES,$(s))))
 $(foreach s,$(SRCS),$(eval $(call CLEAN_PATHS,$(s))))
+$(foreach s,$(SRCS),$(eval $(call MKDIR_RULES,$(s))))
 
-test_make:
-	@echo $(HelloWorld)
-	@echo $(HelloWorldSrc)
-	@echo $(wildcard $(HelloWorldSrc)/*.c)
-	@echo $(patsubst $(HelloWorldSrc)%.c, $(HelloWorldObjs)%.o, $(wildcard $(HelloWorldSrc)*.c))
-
-Main: $(OBJS_PATH)MyProgram.o $(HelloWorldObjs)Greeting.o
+Main: $(OBJS_PATH)MyProgram.o $(HelloWorld)
 	$(LINK) -o $@.out $^
 
 $(OBJS_PATH)%.o: $(SRC_PATH)%.c

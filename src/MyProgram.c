@@ -4,4 +4,5 @@
 int main()
 {
   printf("%s\n", greeting);
+  printf("%s\n", altGreeting);
 }
