@@ -29,13 +29,13 @@ $(1)_PATHS += $(BUILD_PATH)$(1)/results
 endef
 
 define TEST_CFLAGS
-$(1)_CFLAGS += $(CFLAGS) -I$($(1)_SRC_PATH)
+CFLAGS += -I$($(1)_SRC_PATH)
 endef
 
 #$(patsubst $($(1)_TEST_PATH)%.c, $($(1)_RESULTS_PATH)%.txt, $($(1)_TESTS)) 
 
 define TEST_RULES
-$(1): $($(1)_PATHS) 	
+$(1): $($(1)_PATHS) $(patsubst $($(1)_TEST_PATH)%.c, $($(1)_OBJS_PATH)%.o, $($(1)_TESTS))
 	@echo $($(1)_TEST_PATH)
 	@echo $($(1)_SRC_PATH)
 	@echo $($(1)_TESTS)
@@ -45,6 +45,11 @@ $(1): $($(1)_PATHS)
 	@echo $($(1)_RESULTS_PATH)
 	@echo $($(1)_PATHS)
 	@echo $($(1)_CFLAGS)
+endef
+
+define OBJECT_RULES
+$($(1)_OBJS_PATH)%.o: $($(1)_TEST_PATH)%.c
+	$(COMPILE) -o $$@ $$< $(CFLAGS)
 endef
 
 define MKDIR_RULES
@@ -61,6 +66,7 @@ $(OBJS_PATH)unity.o: $(UNITY_PATH)unity.c
 $(foreach t,$(TESTS),$(eval $(call TEST_PATHS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_CFLAGS,$(t))))
 $(foreach t,$(TESTS),$(eval $(call TEST_RULES,$(t))))
+$(foreach t,$(TESTS),$(eval $(call OBJECT_RULES,$(t))))
 $(foreach t,$(TESTS),$(eval $(call MKDIR_RULES,$(t))))
 
 .PHONY: % $(TESTS) 
