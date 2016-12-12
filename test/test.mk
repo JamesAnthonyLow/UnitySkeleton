@@ -13,11 +13,18 @@ LINK = gcc
 
 TEST_DIRS = $(dir $(wildcard $(TEST_PATH)*/*.c))
 SOURCE_DIRS = $(patsubst $(TEST_PATH)%, $(SRC_PATH)%, $(TEST_DIRS)) 
-TESTS = $(patsubst $(TEST_PATH)%, %, $(TEST_DIRS))
+TESTS = $(patsubst $(TEST_PATH)%/, %, $(TEST_DIRS))
+
+define TEST_RULES
+$(1):
+	@echo $(1)
+endef
+
+$(eval $(call TEST_RULES,HelloWorld))
 
 test:
 	@echo $(TEST_DIRS)
 	@echo $(SOURCE_DIRS)
 	@echo $(TESTS)
 
-.PHONY: test
+.PHONY: test % $(TESTS)
