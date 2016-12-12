@@ -3,7 +3,7 @@ TESTS = $(wildcard $(TEST_PATH)*.c)
 
 All: $(patsubst $(TEST_PATH)Test%.c, %, $(TESTS))
 
-%: $(patsubst $(TEST_PATH)%.c, $(RESULTS_PATH)%.txt, $(TEST_PATH)Test%.c)
+%: $(patsubst $(TEST_PATH)%.c, $(RESULTS_PATH)%.txt, $(TEST_PATH)Test%.c, $(TEST_PATH)%/Test%.c)
 	@echo "\n"
 	@echo "-------------------------------------------------------------------------------------"
 	@echo $@
